@@ -256,8 +256,32 @@ async def set_bot_commands(application: Application) -> None:
     await application.bot.set_my_commands(menu)
 
 
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
+async def coupons_du_jour(update, context):
+    clavier = InlineKeyboardMarkup([
+        [InlineKeyboardButton(
+            "📋 Voir les coupons du jour",
+            url="https://t.me/starprono624"
+        )]
+    ])
+    await update.message.reply_text(
+        "⚽ STAR PRONO BOT\n\n"
+        "Retrouvez nos coupons et analyses du jour "
+        "sur notre canal Telegram 👇",
+        reply_markup=clavier
+    )
+
 def register_handlers(application: Application) -> None:
     application.add_handler(CommandHandler("start", start))
+    
+    application.add_handler(
+        CommandHandler("coupons", coupons_du_jour)
+    )
+
+    
+    
+
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("about", about))
     application.add_handler(CommandHandler("ping", ping))
@@ -273,3 +297,6 @@ def register_handlers(application: Application) -> None:
         MessageHandler(filters.Regex(f"^({MENU_HELP}|{MENU_ABOUT}|{MENU_PING})$"), menu_button)
     )
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo_message))
+
+
+
