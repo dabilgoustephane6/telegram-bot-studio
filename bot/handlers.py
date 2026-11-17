@@ -76,6 +76,9 @@ def _main_menu_keyboard() -> ReplyKeyboardMarkup:
 def _dynamic_commands_text() -> str:
     items = commands.menu_commands()
     if not items:
+        
+    
+
         return ""
     lines = [f"/{name} - {description}" for name, description in items]
     return "\n\nAvailable menu commands:\n" + "\n".join(lines)
@@ -93,8 +96,28 @@ def _dynamic_commands_keyboard() -> InlineKeyboardMarkup | None:
         )
         for name, description in items
     ]
-    rows = [buttons[index : index + 2] for index in range(0, len(buttons), 2)]
+    
+    rows = [
+        buttons[index:index + 2]
+        for index in range(0, len(buttons), 2)
+    ]
+
+    rows.append([
+        InlineKeyboardButton(
+            "📋 Coupons du jour",
+            url="https://t.me/starprono624"
+        )
+    ])
+
+    rows.append([
+        InlineKeyboardButton(
+            "🎁 Code promo STAR624",
+            callback_data="promo_star624"
+        )
+    ])
+
     return InlineKeyboardMarkup(rows)
+
 
 
 
@@ -314,7 +337,31 @@ async def coupons_du_jour(update, context):
         reply_markup=clavier
     )
 
+async def promo_star624(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    query = update.callback_query
+    if query is None:
+        return
+
+    await query.answer()
+    await query.message.reply_text(
+        "🎁 CODE PROMO : STAR624\n\n"
+        "⚽ Bienvenue sur STAR PRONO BOT !\n\n"
+        "Utilisez notre code promo STAR624 "
+        "lors de votre inscription.\n\n"
+        "📢 Canal Telegram : https://t.me/starprono624"
+    )
+
+
+
 def register_handlers(application: Application) -> None:
+    
+    application.add_handler(
+        CallbackQueryHandler(
+            promo_star624,
+            pattern="^promo_star624$"
+        )
+    )
+
     application.add_handler(CommandHandler("start", start))
     
     application.add_handler(
