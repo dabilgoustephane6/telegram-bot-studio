@@ -97,20 +97,26 @@ def _dynamic_commands_keyboard() -> InlineKeyboardMarkup | None:
     return InlineKeyboardMarkup(rows)
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+async def start(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+) -> None:
     message = update.effective_message
     user = update.effective_user
+
     if message is None or user is None:
         return
 
-    # Persist the user in PostgreSQL when available (insert on first contact,
-    # refresh otherwise). Without a database the bot still greets the user.
     pool = context.bot_data.get(DB_KEY)
-    is_new = True
     if pool is not None:
-        is_new = await db.upsert_user(pool, user.id, user.username, user.first_name)
+        await db.upsert_user(
+            pool,
+            user.id,
+            user.username,
+            user.first_name
+        )
 
-    
     name = user.first_name or "cher membre"
 
     await message.reply_text(
@@ -126,13 +132,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         reply_markup=_main_menu_keyboard(),
     )
 
-        f"{greeting}, {name}! The bot is running.\n\n"
-        "Choose a menu button below or type /help to see the available commands.",
-        reply_markup=_main_menu_keyboard(),
-    )
     dynamic_keyboard = _dynamic_commands_keyboard()
     if dynamic_keyboard is not None:
-        await message.reply_text("Choose a command:", reply_markup=dynamic_keyboard)
+        await message.reply_text(
+            "👇 Choisissez une commande :",
+            reply_markup=dynamic_keyboard
+        )
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
