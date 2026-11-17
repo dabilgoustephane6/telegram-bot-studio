@@ -1,6 +1,8 @@
 """Telegram update handlers."""
 
 import logging
+import asyncio
+from telegram.error import Forbidden, RetryAfter
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, Update
 from telegram.error import Conflict, NetworkError, TimedOut
@@ -436,7 +438,82 @@ async def admin_button(
         "prochainement."
     )
 
+async def envoyer_coupon_canal(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    post = update.channel_post
+
+    if post is None:
+        return
+
+    if post.chat.username is None:
+        return
+
+    if post.chat.username.lower() != "starprono624":
+        return
+
+    pool = context.bot_data.get(DB_KEY)
+
+    if pool is None:
+        logger.warning("Base de données indisponible.")
+        return
+
+    utilisateurs = await db.list_user_ids(pool)
+
+    logger.info(
+        "Nouveau coupon : %s destinataires",
+        len(utilisateurs)
+    )
+
+    for user_id in utilisateurs:
+        if user_id == ADMIN_ID:
+            continue
+
+        try:
+            await context.bot.copy_message(
+                chat_id=user_id,
+                from_chat_id=post.chat_id,
+                message_id=post.message_id
+            )
+
+            await asyncio.sleep(0.1)
+
+        except RetryAfter as error:
+            await asyncio.sleep(
+                float(error.retry_after) + 1
+            )
+            try:
+                await context.bot.copy_message(
+                    chat_id=user_id,
+                    from_chat_id=post.chat_id,
+                    message_id=post.message_id
+                )
+            except Exception:
+                logger.exception(
+                    "Échec après attente pour %s",
+                    user_id
+                )
+
+        except Forbidden:
+            logger.info(
+                "Utilisateur inaccessible : %s",
+                user_id
+            )
+
+        except Exception:
+            logger.exception(
+                "Erreur d'envoi pour %s",
+                user_id
+            )
+
 def register_handlers(application: Application) -> None:
+        application.add_handler(
+        MessageHandler(
+            filters.UpdateType.CHANNEL_POST,
+            envoyer_coupon_canal
+        )
+    )
     
     application.add_handler(
         CommandHandler("admin", admin_panel)
