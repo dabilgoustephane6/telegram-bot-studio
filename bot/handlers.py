@@ -228,7 +228,7 @@ async def dynamic_command_dispatcher(
 
 async def dynamic_command_button(
     update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> 
+    ) -> None: 
     """Run a panel-managed command selected from an inline button."""
 
     del context
