@@ -130,8 +130,19 @@ async def start(
         "👇 Sélectionnez un bouton pour continuer.\n\n"
         "⭐ STAR PRONO — Analysez avant de jouer. 🔞",
         
-        reply_markup=_dynamic_commands_keyboard(),
+            )
+
+    await message.reply_text(
+        "👇 Voici votre menu principal :",
+        reply_markup=ReplyKeyboardRemove()
     )
+
+    dynamic_keyboard = _dynamic_commands_keyboard()
+    if dynamic_keyboard is not None:
+        await message.reply_text(
+            "🎯 Choisissez votre service :",
+            reply_markup=dynamic_keyboard
+        )
 
 
 
@@ -288,8 +299,7 @@ async def set_bot_commands(application: Application) -> None:
     await application.bot.set_my_commands(menu)
 
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 async def coupons_du_jour(update, context):
     clavier = InlineKeyboardMarkup([
         [InlineKeyboardButton(
