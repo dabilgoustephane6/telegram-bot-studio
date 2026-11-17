@@ -26,6 +26,10 @@ _LOCAL_MESSAGE_COUNTS: dict[int, int] = {}
 
 
 BOT_COMMANDS = (
+MENU_HELP = "📖 Aide et assistance"
+MENU_ABOUT = "ℹ️ À propos de STAR PRONO"
+MENU_PING = "✅ Vérifier le bot"
+
     ("start", "🏠 Accueil principal"),
     ("help", "📖 Aide et assistance"),
     ("about", "ℹ️ À propos de STAR PRONO"),
@@ -50,10 +54,7 @@ Bienvenue sur votre assistant football.
 ⭐ STAR PRONO — Analysez avant de jouer.
 """
 
-/start - Start the bot
-/help - Show help
-/about - Show bot information
-/ping - Check bot status"""
+
 
 DYNAMIC_CALLBACK_PREFIX = "command:"
 
@@ -227,10 +228,12 @@ async def dynamic_command_dispatcher(
 
 
 
+
 async def dynamic_command_button(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
-        # Run a panel-managed command selected from an inline button.
+    # Run a panel-managed command selected from an inline button.
+
 
     del context
     query = update.callback_query
