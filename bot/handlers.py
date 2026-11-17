@@ -25,11 +25,8 @@ DB_KEY = "db"
 _LOCAL_MESSAGE_COUNTS: dict[int, int] = {}
 
 
-BOT_COMMANDS = (
-MENU_HELP = "📖 Aide et assistance"
-MENU_ABOUT = "ℹ️ À propos de STAR PRONO"
-MENU_PING = "✅ Vérifier le bot"
 
+BOT_COMMANDS = (
     ("start", "🏠 Accueil principal"),
     ("help", "📖 Aide et assistance"),
     ("about", "ℹ️ À propos de STAR PRONO"),
@@ -37,6 +34,9 @@ MENU_PING = "✅ Vérifier le bot"
     ("coupons", "🎯 Coupons du jour"),
 )
 
+MENU_HELP = "📖 Aide et assistance"
+MENU_ABOUT = "ℹ️ À propos de STAR PRONO"
+MENU_PING = "✅ Vérifier le bot"
 
 
 HELP_TEXT = """📖 AIDE — STAR PRONO BOT
