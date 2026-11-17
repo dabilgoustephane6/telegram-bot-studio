@@ -327,7 +327,13 @@ async def set_bot_commands(application: Application) -> None:
     await application.bot.set_my_commands(menu)
 
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from telegram import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
+    Update,
+)
 async def coupons_du_jour(update, context):
     clavier = InlineKeyboardMarkup([
         [InlineKeyboardButton(
@@ -507,13 +513,79 @@ async def envoyer_coupon_canal(
                 user_id
             )
 
+
 def register_handlers(application: Application) -> None:
-        application.add_handler(
+    # Diffusion automatique des publications du canal
+    application.add_handler(
         MessageHandler(
             filters.UpdateType.CHANNEL_POST,
             envoyer_coupon_canal
         )
     )
+
+    # Administration
+    application.add_handler(
+        CommandHandler("admin", admin_panel)
+    )
+
+    application.add_handler(
+        CallbackQueryHandler(
+            admin_button,
+            pattern=r"^admin_"
+        )
+    )
+
+    # Code promotionnel
+    application.add_handler(
+        CallbackQueryHandler(
+            promo_star624,
+            pattern=r"^promo_star624$"
+        )
+    )
+
+    # Commandes principales
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(
+        CommandHandler("coupons", coupons_du_jour)
+    )
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("about", about))
+    application.add_handler(CommandHandler("ping", ping))
+
+    # Boutons des commandes personnalisées
+    application.add_handler(
+        CallbackQueryHandler(
+            dynamic_command_button,
+            pattern=rf"^{DYNAMIC_CALLBACK_PREFIX}[a-z0-9_]{{1,32}}$"
+        )
+    )
+
+    # Autres commandes
+    application.add_handler(
+        MessageHandler(
+            filters.COMMAND,
+            dynamic_command_dispatcher
+        )
+    )
+
+    # Menu principal
+    application.add_handler(
+        MessageHandler(
+            filters.Regex(
+                rf"^({MENU_HELP}|{MENU_ABOUT}|{MENU_PING})$"
+            ),
+            menu_button
+        )
+    )
+
+    # Messages ordinaires
+    application.add_handler(
+        MessageHandler(
+            filters.TEXT & ~filters.COMMAND,
+            echo_message
+        )
+    )
+
     
     application.add_handler(
         CommandHandler("admin", admin_panel)
