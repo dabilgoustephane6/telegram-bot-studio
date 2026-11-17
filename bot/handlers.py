@@ -110,9 +110,22 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if pool is not None:
         is_new = await db.upsert_user(pool, user.id, user.username, user.first_name)
 
-    name = user.first_name if user.first_name else "friend"
-    greeting = "Welcome" if is_new else "Welcome back"
+    
+    name = user.first_name or "cher membre"
+
     await message.reply_text(
+        f"⚽ BIENVENUE SUR STAR PRONO BOT ⭐\n\n"
+        f"Bonjour {name} 👋\n\n"
+        "🎯 Retrouvez nos coupons et analyses du jour.\n"
+        "📊 Découvrez nos pronostics sportifs.\n\n"
+        "🎁 CODE PROMO : STAR624\n\n"
+        "📢 Notre canal Telegram :\n"
+        "https://t.me/starprono624\n\n"
+        "👇 Sélectionnez un bouton pour continuer.\n\n"
+        "⭐ STAR PRONO — Analysez avant de jouer. 🔞",
+        reply_markup=_main_menu_keyboard(),
+    )
+
         f"{greeting}, {name}! The bot is running.\n\n"
         "Choose a menu button below or type /help to see the available commands.",
         reply_markup=_main_menu_keyboard(),
