@@ -418,3 +418,11 @@ async def list_audit_log(pool: asyncpg.Pool, *, limit: int = 20) -> list[dict]:
 async def clear_audit_log(pool: asyncpg.Pool) -> int:
     result = await pool.execute("DELETE FROM audit_log;")
     return int(result.rsplit(" ", 1)[-1])
+    
+async def list_user_ids(pool: asyncpg.Pool) -> list[int]:
+    """Récupérer les identifiants des utilisateurs du bot."""
+    rows = await pool.fetch(
+        "SELECT telegram_id FROM users ORDER BY telegram_id;"
+    )
+    return [int(row["telegram_id"]) for row in rows]
+
