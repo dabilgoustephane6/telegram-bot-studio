@@ -226,10 +226,11 @@ async def dynamic_command_dispatcher(
     await message.reply_text("Unknown command. Type /help for assistance.")
 
 
+
 async def dynamic_command_button(
     update: Update, context: ContextTypes.DEFAULT_TYPE
-    ) -> None: 
-    """Run a panel-managed command selected from an inline button."""
+) -> None:
+        # Run a panel-managed command selected from an inline button.
 
     del context
     query = update.callback_query
