@@ -129,15 +129,10 @@ async def start(
         "https://t.me/starprono624\n\n"
         "👇 Sélectionnez un bouton pour continuer.\n\n"
         "⭐ STAR PRONO — Analysez avant de jouer. 🔞",
-        reply_markup=_main_menu_keyboard(),
+        
+        reply_markup=_dynamic_commands_keyboard(),
     )
 
-    dynamic_keyboard = _dynamic_commands_keyboard()
-    if dynamic_keyboard is not None:
-        await message.reply_text(
-            "👇 Choisissez une commande :",
-            reply_markup=dynamic_keyboard
-        )
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
