@@ -439,6 +439,18 @@ async def admin_button(
 def register_handlers(application: Application) -> None:
     
     application.add_handler(
+        CommandHandler("admin", admin_panel)
+    )
+
+    application.add_handler(
+        CallbackQueryHandler(
+            admin_button,
+            pattern=r"^admin_"
+        )
+    )
+
+    
+    application.add_handler(
         CallbackQueryHandler(
             promo_star624,
             pattern="^promo_star624$"
