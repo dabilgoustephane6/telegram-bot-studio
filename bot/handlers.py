@@ -24,18 +24,32 @@ DB_KEY = "db"
 # Message counts are intentionally process-local and reset after a redeploy.
 _LOCAL_MESSAGE_COUNTS: dict[int, int] = {}
 
+
 BOT_COMMANDS = (
-    ("start", "Show the main menu"),
-    ("help", "Show help"),
-    ("about", "Show bot information"),
-    ("ping", "Check bot status"),
+    ("start", "🏠 Accueil principal"),
+    ("help", "📖 Aide et assistance"),
+    ("about", "ℹ️ À propos de STAR PRONO"),
+    ("ping", "✅ Vérifier le bot"),
+    ("coupons", "🎯 Coupons du jour"),
 )
 
-MENU_HELP = "Help"
-MENU_ABOUT = "About"
-MENU_PING = "Ping"
 
-HELP_TEXT = """Available commands:
+
+HELP_TEXT = """📖 AIDE — STAR PRONO BOT
+
+Bienvenue sur votre assistant football.
+
+🏠 /start - Menu principal
+📖 /help - Aide et assistance
+ℹ️ /about - Informations du bot
+✅ /ping - Vérifier le fonctionnement
+🎯 /coupons - Consulter les coupons
+
+🎁 Code promo : STAR624
+
+⭐ STAR PRONO — Analysez avant de jouer.
+"""
+
 /start - Start the bot
 /help - Show help
 /about - Show bot information
