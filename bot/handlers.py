@@ -265,7 +265,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
 
 
 async def set_bot_commands(application: Application) -> None:
-    """Publish the built-in commands plus any panel-managed ones to Telegram."""
+    # Publish the built-in commands plus any panel-managed ones to Telegram.
     menu = list(BOT_COMMANDS) + commands.menu_commands()
     await application.bot.set_my_commands(menu)
 
