@@ -18,6 +18,9 @@ from bot import commands, db
 
 logger = logging.getLogger(__name__)
 
+ADMIN_ID = 1395567047
+
+
 # Keys used to read shared connections from Application.bot_data.
 DB_KEY = "db"
 
@@ -352,6 +355,86 @@ async def promo_star624(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     )
 
 
+
+async def admin_panel(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    user = update.effective_user
+    message = update.effective_message
+
+    if user is None or message is None:
+        return
+
+    if user.id != ADMIN_ID:
+        await message.reply_text(
+            "⛔ Accès réservé à l'administrateur."
+        )
+        return
+
+    keyboard = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton(
+                "📋 Gérer les coupons",
+                callback_data="admin_coupons"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "✏️ Modifier les messages",
+                callback_data="admin_messages"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "🎁 Gérer le code promo",
+                callback_data="admin_promo"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "📢 Annonces",
+                callback_data="admin_annonces"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "📊 Statistiques",
+                callback_data="admin_stats"
+            )
+        ]
+    ])
+
+    await message.reply_text(
+        "🔐 ADMINISTRATION STAR PRONO BOT\n\n"
+        "Bienvenue dans votre espace privé.\n\n"
+        "👇 Sélectionnez une rubrique :",
+        reply_markup=keyboard
+    )
+
+
+async def admin_button(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    query = update.callback_query
+    if query is None:
+        return
+
+    user = update.effective_user
+    if user is None or user.id != ADMIN_ID:
+        await query.answer(
+            "⛔ Accès interdit.",
+            show_alert=True
+        )
+        return
+
+    await query.answer()
+
+    await query.message.reply_text(
+        "⚙️ Cette rubrique sera configurée "
+        "prochainement."
+    )
 
 def register_handlers(application: Application) -> None:
     
