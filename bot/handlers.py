@@ -516,24 +516,15 @@ async def envoyer_coupon_canal(
             )
 
 
+
 def register_handlers(application: Application) -> None:
+    admin_features.register_admin_features(application)
+
     # Diffusion automatique des publications du canal
     application.add_handler(
         MessageHandler(
             filters.UpdateType.CHANNEL_POST,
             envoyer_coupon_canal
-        )
-    )
-
-    # Administration
-    application.add_handler(
-        CommandHandler("admin", admin_panel)
-    )
-
-    application.add_handler(
-        CallbackQueryHandler(
-            admin_button,
-            pattern=r"^admin_"
         )
     )
 
@@ -547,9 +538,7 @@ def register_handlers(application: Application) -> None:
 
     # Commandes principales
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(
-        CommandHandler("coupons", coupons_du_jour)
-    )
+    
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("about", about))
     application.add_handler(CommandHandler("ping", ping))
